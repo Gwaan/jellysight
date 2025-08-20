@@ -3,28 +3,34 @@ version: '3.8'
 services:
   # Client React Vite - Development
   client:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-      target: client
+    image: node:22-alpine
+    container_name: jellysight_frontend
+    working_dir: /app
     ports:
-      - "5173:5173"
+      - '5173:5173'
     environment:
       - NODE_ENV=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npm install -g pnpm && pnpm install && pnpm --filter @jellysight/client dev"
     restart: unless-stopped
     networks:
       - jellysight
 
   # Server NestJS - Development
   server:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-      target: server
+    image: node:22-alpine
+    container_name: jellysight_api
+    working_dir: /app
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npm install -g pnpm && pnpm install && pnpm --filter @jellysight/server dev"
     restart: unless-stopped
     networks:
       - jellysight
