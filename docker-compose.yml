@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Client React Vite - Development
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: client
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    networks:
+      - jellysight
+
+  # Server NestJS - Development
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: server
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    networks:
+      - jellysight
+    depends_on:
+      - client
+
+networks:
+  jellysight:
+    driver: bridge

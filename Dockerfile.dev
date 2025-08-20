@@ -1,0 +1,20 @@
+# Base image with Node.js 22 and pnpm
+FROM node:22-alpine AS base
+WORKDIR /container-app
+RUN npm install -g pnpm
+
+# Copy all source code
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/ ./apps/
+COPY nest-cli.json tsconfig.json tsconfig.build.json ./
+RUN pnpm install --frozen-lockfile
+
+# Client development stage
+FROM base AS client
+EXPOSE 5173
+CMD ["pnpm", "--filter", "@jellysight/client", "dev"]
+
+# Server development stage  
+FROM base AS server
+EXPOSE 3000
+CMD ["pnpm", "--filter", "@jellysight/server", "dev"]
