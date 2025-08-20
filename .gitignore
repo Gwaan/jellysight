@@ -3,6 +3,10 @@
 /node_modules
 /build
 
+# pnpm
+.pnpm-store/
+.pnpm-debug.log*
+
 # Logs
 logs
 *.log
@@ -27,6 +31,7 @@ lerna-debug.log*
 *.launch
 .settings/
 *.sublime-workspace
+.claude/*
 
 # IDE - VSCode
 .vscode/*
